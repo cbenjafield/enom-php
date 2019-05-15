@@ -1,0 +1,27 @@
+{
+    "name": "cbenjafield/enom-php",
+    "description": "PHP Library to connect to the ENOM Resellers API.",
+    "type": "library",
+    "keywords": [
+        "enom",
+        "domains",
+        "resellers"
+    ],
+    "license": "Proprietary",
+    "authors": [
+        {
+            "name": "Charlie Benjafield",
+            "email": "me@cbenjafield.com",
+            "homepage": "https://cbenjafield.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "guzzlehttp/guzzle": "^6.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Benjafield\\Enom\\": "src/"
+        }
+    }
+}
