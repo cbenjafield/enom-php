@@ -3,6 +3,7 @@
 namespace Benjafield\Enom;
 
 use Benjafield\Enom\Request;
+use Benjafield\Enom\Resource;
 
 class Domain {
 
@@ -25,7 +26,13 @@ class Domain {
 		if(count($domainList)) $params['DomainList'] = implode(',', $domainList);
 		if(count($tldList)) $params['TLDList'] = implode(',', $tldList);
 
-		return $this->command('Check', $params);
+		$response = $this->command('Check', $params);
+
+		return new Resource([
+			'domain' => $response->DomainName,
+			'status' => $this->translateRRPCode($response->RRPCode),
+			'rrptext' => $response->RRPText
+		]);
 	}
 
 	protected function convertValuesToString(array $array)
