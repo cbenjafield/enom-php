@@ -30,9 +30,9 @@ class Domain {
 
 		return new Resource([
 			'domain' => $response->DomainName,
-			'status' => $this->translateRRPCode($response->RRPCode, $response->RRPText),
+			'status' => $this->translateRRPCode((int) $response->RRPCode, $response->RRPText),
 			'rrptext' => $response->RRPText,
-			'rrpcode' => $response->RRPCode
+			'rrpcode' => (int) $response->RRPCode
 		]);
 	}
 
