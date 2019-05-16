@@ -30,9 +30,19 @@ class Domain {
 
 		return new Resource([
 			'domain' => $response->DomainName,
-			'status' => $this->translateRRPCode($response->RRPCode),
-			'rrptext' => $response->RRPText
+			'status' => $this->translateRRPCode($response->RRPCode, $response->RRPText),
+			'rrptext' => $response->RRPText,
+			'rrpcode' => $response->RRPCode
 		]);
+	}
+
+	protected function translateRRPCode($code, $default = null)
+	{
+		$codes = [
+			210 => 'available',
+			211 => 'unavailable'
+		];
+		return in_array($code, array_keys($codes)) ? $codes[$code] : empty($default) ? $code : $default;
 	}
 
 	protected function convertValuesToString(array $array)
