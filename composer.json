@@ -23,5 +23,12 @@
         "psr-4": {
             "Benjafield\\Enom\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Benjafield\\Enom\\Providers\\EnomServiceProvider"
+            ]
+        }
     }
 }
