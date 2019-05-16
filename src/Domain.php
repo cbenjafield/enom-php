@@ -42,7 +42,7 @@ class Domain {
 			210 => 'available',
 			211 => 'unavailable'
 		];
-		return in_array($code, array_keys($codes)) ? $codes[$code] : empty($default) ? $code : $default;
+		return (in_array($code, array_keys($codes)) ? $codes[$code] : (empty($default) ? $code : $default));
 	}
 
 	protected function convertValuesToString(array $array)
