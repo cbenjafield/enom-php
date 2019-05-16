@@ -5,7 +5,7 @@ namespace Benjafield\Enom\Providers;
 use Benjafield\Enom\Enom;
 use Benjafield\Enom\Domain;
 
-class EnomServiceProvider extends Illuminate\Support\ServiceProvider {
+class EnomServiceProvider extends \Illuminate\Support\ServiceProvider {
 
 	public function boot()
 	{
