@@ -15,7 +15,7 @@ class Domain {
 		$this->request = new Request($enom);
 	}
 
-	public function check($sld, $tld, $domainList = [], $tldList = [])
+	public function check(string $sld, string $tld, array $domainList = [], array $tldList = [])
 	{
 		$params = [
 			'SLD' => $sld,
@@ -25,15 +25,55 @@ class Domain {
 		if(count($domainList)) $params['DomainList'] = implode(',', $domainList);
 		if(count($tldList)) $params['TLDList'] = implode(',', $tldList);
 
-		// die('<pre>'.print_r($params, true).'</pre>');
+		return $this->command('Check', $params);
+	}
 
-		$response = $this->request->get('CHECK', $params);
+	protected function convertValuesToString(array $array)
+	{
+		$result = [];
+		foreach($array as $key => $value)
+		{
+			if(is_array($value)) $result[$key] = implode(',', $value);
+			elseif(is_bool($value)) $result[$key] = $value ? 'true' : 'false';
+			else $result[$key] = (string) $value;
+		}
+		return $result;
+	}
 
-		$response = $this->request->parseXml($response);
-
+	protected function command(string $name, array $params = [], bool $simpleXml = false)
+	{
+		$response = $this->request->get($name, $params);
+		$response = $this->request->parseXml($response, $simpleXml);
 		if($response->ErrCount > 0) throw new Exceptions\EnomApiException($response->errors);
 
 		return $response;
+	}
+
+	public function suggestions(string $searchTerm, array $options = [])
+	{
+		$params = array_merge([
+			'SearchTerm' => $searchTerm
+		], $options);
+
+		$params = array_filter($this->convertValuesToString($params));
+
+		$response = $this->command('GetNameSuggestions', $params, true);
+		$result = json_decode(json_encode($response));
+		unset($result->DomainSuggestions);
+
+		$result->suggestions = [];
+
+		foreach($response->DomainSuggestions->Domain as $key => $domain)
+		{
+			$attributes = (array) $domain->attributes();
+
+			$result->suggestions[] = (object) [
+				'domain' => strtolower($domain),
+				'attributes' => (object) $attributes['@attributes']
+			];
+		}
+
+		return $result;
 	}
 
 }

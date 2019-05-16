@@ -40,8 +40,6 @@ class Request {
 			'Command' => $command
 		], $params);
 
-		// die('<pre>'.print_r($params, true).'</pre>');
-
 		$response = $this->client->request('GET', '', [
 			'query' => $params
 		]);
@@ -49,9 +47,10 @@ class Request {
 		return $response;
 	}
 
-	public function parseXml($response)
+	public function parseXml($response, $simpleXml = false)
 	{
 		$xml = new SimpleXMLElement($response->getBody()->getContents());
+		if($simpleXml) return $xml;
 		return json_decode(json_encode($xml));
 	}
 
